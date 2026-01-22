@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ResumeRanker</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap" rel="stylesheet">
+    <!-- New font for Title -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .split-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .split-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .quick-action-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            margin-bottom: 16px;
+        }
+
+        .quick-action-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+        }
+
+        .project-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 50px;
+            padding-left: 10px;
+        }
+
+        .project-title i {
+            color: var(--primary);
+            filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.6));
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="project-title">
+                <i data-lucide="sparkles"></i>
+                <span>Resume<span style="color: var(--primary)">Ranker</span></span>
+            </div>
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item active">
+                    <i data-lucide="layout-dashboard"></i>  Dashboard
+                </a>
+                <a href="upload_resume.html" class="nav-item">
+                    <i data-lucide="upload-cloud"></i> Upload Resume
+                </a>
+                <a href="cv_scoring.html" class="nav-item">
+                    <i data-lucide="bar-chart-2"></i> CV Scoring
+                </a>
+                <a href="result.html" class="nav-item">
+                    <i data-lucide="check-circle"></i> Results
+                </a>
+            </nav>
+            <div class="back-home">
+                <a href="index.html" class="nav-item">
+                    <i data-lucide="arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2 class="page-title">Dashboard</h2>
+                <p class="page-subtitle">Welcome back, Recruiter</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i data-lucide="file-text"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-uploaded">0</div>
+                        <div class="stat-label">Total Resumes Uploaded</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(0, 230, 118, 0.15); color: var(--success);"><i
+                            data-lucide="user-check"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-selected">0</div>
+                        <div class="stat-label">Total Resumes Selected</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(255, 171, 0, 0.15); color: #FFAB00;"><i
+                            data-lucide="trophy"></i></div>
+                    <div>
+                        <div class="stat-value" id="highest-score">0%</div>
+                        <div class="stat-label">Highest CV Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Split Layout -->
+            <div class="split-layout">
+                <!-- Left: Quick Actions -->
+                <div>
+                    <h3 style="margin-bottom: 20px;">Quick Actions</h3>
+                    <div onclick="window.location.href='upload_resume.html'" class="quick-action-card">
+                        <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="plus"></i></div>
+                        <div>
+                            <div style="font-weight: 600;">Upload New Batch</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Process new candidates</div>
+                        </div>
+                    </div>
+                    <div onclick="window.location.href='cv_scoring.html'" class="quick-action-card">
+                        <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="list"></i></div>
+                        <div>
+                            <div style="font-weight: 600;">View Rankings</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Check current top candidates
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Recent Activity -->
+                <div>
+                    <h3 style="margin-bottom: 20px;">Recent Activity</h3>
+                    <div id="recent-activity-list"
+                        style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
