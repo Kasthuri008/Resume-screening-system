@@ -44,21 +44,22 @@ resume_ats/
 ├── requirements.txt
 │
 ├── templates/
-│   ├── index.html        # Landing Page
-│   ├── dashboard.html   # Dashboard Page
-│   ├── upload.html      # Resume Upload Page
-│   ├── scoring.html     # CV Scoring Page
-│   └── results.html     # Results Page
+│ ├── index.html (Landing Page)
+│ ├── dashboard.html (Dashboard Page)
+│ ├── upload.html (Resume Upload Page)
+│ ├── scoring.html (CV Scoring Page)
+│ └── results.html (Results Page)
 │
 ├── static/
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   └── script.js
-│   └── images/
+│ ├── css/
+│ │ └── style.css
+│ ├── js/
+│ │ └── script.js
+│ └── images/
 │
-├── uploads/             # Uploaded resume files
+├── uploads/ (Uploaded resume files)
 │
+└── README.md
 └── README.md
 
 
