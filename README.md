@@ -38,6 +38,7 @@ This project is developed as a **final-year student project** with a clean, simp
 ---
 
 ## 📂 Project Structure
+```
 resume_ats/
 │
 ├── app.py
@@ -61,5 +62,6 @@ resume_ats/
 │
 └── README.md
 └── README.md
+```
 
 
