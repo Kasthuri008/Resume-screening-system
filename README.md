@@ -38,4 +38,27 @@ This project is developed as a **final-year student project** with a clean, simp
 ---
 
 ## 📂 Project Structure
+resume_ats/
+│
+├── app.py
+├── requirements.txt
+│
+├── templates/
+│   ├── index.html        # Landing Page
+│   ├── dashboard.html   # Dashboard Page
+│   ├── upload.html      # Resume Upload Page
+│   ├── scoring.html     # CV Scoring Page
+│   └── results.html     # Results Page
+│
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── script.js
+│   └── images/
+│
+├── uploads/             # Uploaded resume files
+│
+└── README.md
+
 
