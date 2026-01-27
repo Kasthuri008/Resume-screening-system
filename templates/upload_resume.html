@@ -6,23 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Resume - ResumeRanker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .project-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 50px;
-            padding-left: 10px;
+            gap: 8px;
+            margin-bottom: 40px;
+            padding-left: 8px;
+            font-weight: 600;
         }
 
         .project-title i {
             color: var(--primary);
-            filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.6));
         }
     </style>
 </head>
@@ -51,16 +48,16 @@
 
             <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" id="upload-form">
                 <div class="upload-area" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                    <i data-lucide="cloud-upload" size="48" style="color: var(--primary); margin-bottom: 20px;"></i>
+                    <i data-lucide="upload" size="40" style="color: var(--primary); margin-bottom: 16px;"></i>
                     <h3>Drag & Drop Resumes Here</h3>
-                    <p style="color: var(--text-muted); margin-bottom: 20px;">Minimum 10 resumes required (PDF only)</p>
+                    <p style="color: var(--text-muted); margin-bottom: 16px;">Minimum 10 resumes required (PDF only)</p>
                     <input type="file" id="file-input" name="resumes" multiple accept=".pdf" style="display: none;">
                     <button type="button" class="btn btn-outline" onclick="event.stopPropagation(); document.getElementById('file-input').click()">Browse Files</button>
-                    <p id="file-count" style="margin-top: 15px; color: var(--text-muted); font-weight: 500;">No files selected</p>
+                    <p id="file-count" style="margin-top: 12px; color: var(--text-muted); font-weight: 500;">No files selected</p>
                 </div>
 
                 <div class="form-group">
-                    <label style="display: block; margin-bottom: 10px; font-weight: 500;">Job Description *</label>
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Job Description *</label>
                     <textarea name="job_description" class="job-desc-input" placeholder="Enter job requirements and required skills (e.g., Python, React, SQL, etc.)" required></textarea>
                 </div>
 

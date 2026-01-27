@@ -52,7 +52,6 @@
 
         .project-title i {
             color: var(--primary);
-            filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.6));
         }
     </style>
 </head>
@@ -125,45 +124,53 @@
                 
                 <div>
                     <h3 style="margin-bottom: 20px;">Quick Actions</h3>
-                    <div onclick="window.location.href='{{ url_for('upload') }}'" class="quick-action-card">
+                    <a href="{{ url_for('upload') }}" class="quick-action-card" style="text-decoration: none; color: inherit;">
                         <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="plus"></i></div>
                         <div>
                             <div style="font-weight: 600;">Upload New Batch</div>
                             <div style="font-size: 0.85rem; color: var(--text-muted);">Process new candidates</div>
                         </div>
-                    </div>
-                    <div onclick="window.location.href='{{ url_for('scoring') }}'" class="quick-action-card">
+                    </a>
+                    <a href="{{ url_for('scoring') }}" class="quick-action-card" style="text-decoration: none; color: inherit;">
                         <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="bar-chart-2"></i></div>
                         <div>
                             <div style="font-weight: 600;">View CV Scoring</div>
                             <div style="font-size: 0.85rem; color: var(--text-muted);">Check detailed rankings
                             </div>
                         </div>
-                    </div>
-                    <div onclick="window.location.href='{{ url_for('results') }}'" class="quick-action-card">
+                    </a>
+                    <a href="{{ url_for('results') }}" class="quick-action-card" style="text-decoration: none; color: inherit;">
                         <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="trophy"></i></div>
                         <div>
                             <div style="font-weight: 600;">View Top 3 Results</div>
                             <div style="font-size: 0.85rem; color: var(--text-muted);">Check selected candidates
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
+
+                
 
                 
                 <div>
                     <h3 style="margin-bottom: 20px;">Recent Activity</h3>
-                    <div id="recent-activity-list"
-                        style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
+                    <div id="recent-activity-list" style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
                         {% if recent_activities %}
                             {% for activity in recent_activities %}
-                            <div style="padding: 12px 0; {% if not loop.last %}border-bottom: 1px solid #333;{% endif %} display: flex; align-items: center;">
-                                <div style="width: 8px; height: 8px; background: 
-                                    {% if activity.type == 'success' %}var(--success)
-                                    {% elif activity.type == 'warning' %}var(--warning)
-                                    {% elif activity.type == 'error' %}var(--danger)
-                                    {% else %}var(--primary){% endif %}; 
-                                    border-radius: 50%; margin-right: 12px;"></div>
+                            {% if not loop.last %}
+                            <div style="padding: 12px 0; display: flex; align-items: center; border-bottom: 1px solid #333;">
+                            {% else %}
+                            <div style="padding: 12px 0; display: flex; align-items: center;">
+                            {% endif %}
+                                {% if activity.type == 'success' %}
+                                    <div style="width: 8px; height: 8px; border-radius: 50%; margin-right: 12px; background: var(--success);"></div>
+                                {% elif activity.type == 'warning' %}
+                                    <div style="width: 8px; height: 8px; border-radius: 50%; margin-right: 12px; background: var(--warning);"></div>
+                                {% elif activity.type == 'error' %}
+                                    <div style="width: 8px; height: 8px; border-radius: 50%; margin-right: 12px; background: var(--danger);"></div>
+                                {% else %}
+                                    <div style="width: 8px; height: 8px; border-radius: 50%; margin-right: 12px; background: var(--primary);"></div>
+                                {% endif %}
                                 <div style="flex: 1;">
                                     <div style="font-size: 0.9rem;">{{ activity.message }}</div>
                                     <div style="font-size: 0.75rem; color: var(--text-muted);">{{ activity.time_ago }}</div>

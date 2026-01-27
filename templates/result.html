@@ -7,7 +7,7 @@
     <title>Results - ResumeRanker</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=wrap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .project-title {
@@ -22,7 +22,6 @@
 
         .project-title i {
             color: var(--primary);
-            filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.6));
         }
     </style>
 </head>
@@ -54,7 +53,7 @@
                 </div>
             </div>
 
-           
+            <!-- Top Candidate Highlight -->
             {% if results and results|length > 0 %}
             <div style="background: var(--bg-card); padding: 30px; border-radius: var(--radius-lg); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05);">
                 <div>
@@ -62,11 +61,13 @@
                     <h3 style="font-size: 1.8rem; margin-bottom: 10px;">{{ results[0].candidate_name.replace('.pdf', '') }}</h3>
                     <p style="color: var(--text-muted); margin-bottom: 20px;">{{ results[0].candidate_name.lower().replace(' ', '.').replace('.pdf', '') }}@example.com</p>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        {% for skill in results[0].matched_skills[:3] %}
-                        <span class="match-badge match-high">{{ skill }}</span>
-                        {% endfor %}
-                        {% if results[0].matched_skills|length > 3 %}
-                        <span class="match-badge" style="background: rgba(255,255,255,0.1);">+{{ results[0].matched_skills|length - 3 }} more</span>
+                        {% if results[0].matched_skills %}
+                            {% for skill in results[0].matched_skills[:3] %}
+                            <span class="match-badge match-high">{{ skill }}</span>
+                            {% endfor %}
+                            {% if results[0].matched_skills|length > 3 %}
+                            <span class="match-badge" style="background: rgba(255,255,255,0.1);">+{{ results[0].matched_skills|length - 3 }} more</span>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -96,7 +97,7 @@
                                 <td>
                                     <div style="display: flex; align-items: center;">
                                         {% if loop.index == 1 %}
-                                        <span style="color: #FFD700; margin-right: 8px;"></span>
+                                        <span style="color: #FFD700; margin-right: 8px;">🥇</span>
                                         {% elif loop.index == 2 %}
                                         <span style="color: #C0C0C0; margin-right: 8px;">🥈</span>
                                         {% elif loop.index == 3 %}
@@ -108,20 +109,46 @@
                                 </td>
                                 <td>
                                     <div style="font-weight: 600;">{{ candidate.candidate_name.replace('.pdf', '') }}</div>
-                                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ candidate.matched_skills|length }} skills matched</div>
-                                </td>
-                                <td><span style="font-weight: bold; color: {{ 'var(--success)' if candidate.final_score >= 70 else 'var(--warning)' if candidate.final_score >= 40 else 'var(--danger)' }};">{{ candidate.final_score }}%</span></td>
-                                <td>
-                                    <div style="display: flex; flex-wrap: wrap; gap: 4px;">
-                                        {% for skill in candidate.matched_skills[:3] %}
-                                        <span style="background: rgba(255, 64, 129, 0.1); color: var(--primary); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">{{ skill }}</span>
-                                        {% endfor %}
-                                        {% if candidate.matched_skills|length > 3 %}
-                                        <span style="background: rgba(255,255,255,0.1); color: var(--text-muted); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">+{{ candidate.matched_skills|length - 3 }}</span>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                        {% if candidate.matched_skills %}
+                                            {{ candidate.matched_skills|length }} skills matched
+                                        {% else %}
+                                            0 skills matched
                                         {% endif %}
                                     </div>
                                 </td>
-                                <td><span class="match-badge {{ 'match-high' if candidate.final_score >= 70 else 'match-medium' if candidate.final_score >= 40 else 'match-low' }}">{{ candidate.match_level }} Match</span></td>
+                                <td>
+                                    {% if candidate.final_score >= 70 %}
+                                        <span style="font-weight: bold; color: var(--success);">{{ candidate.final_score }}%</span>
+                                    {% elif candidate.final_score >= 40 %}
+                                        <span style="font-weight: bold; color: var(--warning);">{{ candidate.final_score }}%</span>
+                                    {% else %}
+                                        <span style="font-weight: bold; color: var(--danger);">{{ candidate.final_score }}%</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                                        {% if candidate.matched_skills %}
+                                            {% for skill in candidate.matched_skills[:3] %}
+                                            <span style="background: var(--bg-secondary); color: var(--primary); padding: 2px 8px; border-radius: 6px; font-size: 0.8rem;">{{ skill }}</span>
+                                            {% endfor %}
+                                            {% if candidate.matched_skills|length > 3 %}
+                                            <span style="background: rgba(255,255,255,0.1); color: var(--text-muted); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">+{{ candidate.matched_skills|length - 3 }}</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span style="color: var(--text-muted); font-size: 0.8rem;">No skills matched</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if candidate.final_score >= 70 %}
+                                        <span class="match-badge match-high">{{ candidate.match_level }} Match</span>
+                                    {% elif candidate.final_score >= 40 %}
+                                        <span class="match-badge match-medium">{{ candidate.match_level }} Match</span>
+                                    {% else %}
+                                        <span class="match-badge match-low">{{ candidate.match_level }} Match</span>
+                                    {% endif %}
+                                </td>
                             </tr>
                             {% endfor %}
                         {% else %}
