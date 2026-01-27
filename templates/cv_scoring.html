@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Scoring - ResumeRanker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .project-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 50px;
+            padding-left: 10px;
+        }
+
+        .project-title i {
+            color: var(--primary);
+            filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.6));
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="project-title"><i data-lucide="sparkles"></i><span>Resume<span
+                        style="color: var(--primary)">Ranker</span></span></div>
+            <nav class="nav-menu">
+                <a href="{{ url_for('dashboard') }}" class="nav-item"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+                <a href="{{ url_for('upload') }}" class="nav-item"><i data-lucide="upload-cloud"></i> Upload Resume</a>
+                <a href="{{ url_for('scoring') }}" class="nav-item active"><i data-lucide="bar-chart-2"></i> CV Scoring</a>
+                <a href="{{ url_for('results') }}" class="nav-item"><i data-lucide="check-circle"></i> Results</a>
+            </nav>
+            <div class="back-home"><a href="{{ url_for('home') }}" class="nav-item"><i data-lucide="arrow-left"></i> Back to
+                    Home</a></div>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h2 class="page-title">CV Scoring</h2>
+                <p class="page-subtitle">All Candidates Ranked by Score</p>
+            </div>
+
+            <div class="table-container">
+                <table id="scoring-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Candidate Name</th>
+                            <th>Score</th>
+                            <th>Matched Skills</th>
+                            <th>Match Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if results and results|length > 0 %}
+                            {% for candidate in results[:10] %}
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center;">
+                                        {% if loop.index == 1 %}
+                                        <span style="color: #FFD700; margin-right: 8px;">🥇</span>
+                                        {% elif loop.index == 2 %}
+                                        <span style="color: #C0C0C0; margin-right: 8px;">🥈</span>
+                                        {% elif loop.index == 3 %}
+                                        <span style="color: #CD7F32; margin-right: 8px;">🥉</span>
+                                        {% endif %}
+                                        #{{ loop.index }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600;">{{ candidate.candidate_name.replace('.pdf', '') }}</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted);">{{ candidate.matched_skills|length }} skills matched</div>
+                                </td>
+                                <td><span style="font-weight: bold; color: {{ 'var(--success)' if candidate.score >= 70 else 'var(--warning)' if candidate.score >= 40 else 'var(--danger)' }};">{{ candidate.score }}%</span></td>
+                                <td>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                                        {% for skill in candidate.matched_skills[:3] %}
+                                        <span style="background: rgba(255, 64, 129, 0.1); color: var(--primary); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">{{ skill }}</span>
+                                        {% endfor %}
+                                        {% if candidate.matched_skills|length > 3 %}
+                                        <span style="background: rgba(255,255,255,0.1); color: var(--text-muted); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem;">+{{ candidate.matched_skills|length - 3 }}</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td><span class="match-badge {{ 'match-high' if candidate.score >= 70 else 'match-medium' if candidate.score >= 40 else 'match-low' }}">{{ candidate.match_level }} Match</span></td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                    <i data-lucide="upload-cloud" size="48" style="margin-bottom: 16px; opacity: 0.5;"></i>
+                                    <div>No scoring data available. Please upload minimum 10 resumes first.</div>
+                                    <a href="{{ url_for('upload') }}" class="btn btn-primary" style="margin-top: 16px;">Upload Resumes</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

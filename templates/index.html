@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ResumeRanker - AI Powered Resume Screening</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Modern Hero Section with Glassmorphism */
@@ -480,7 +480,7 @@
                     <li><a href="#how">How It Works</a></li>
                 </ul>
             </nav>
-            <a href="dashboard.html" class="btn btn-primary">Get Started</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Get Started</a>
         </header>
     </div>
 
@@ -498,7 +498,7 @@
                 </p>
                 
                 <div class="hero-cta">
-                    <a href="dashboard.html" class="btn-glass btn-primary-glass">Start Screening Now</a>
+                    <a href="{{ url_for('upload') }}" class="btn-glass btn-primary-glass">Start Screening Now</a>
                     <a href="#features" class="btn-glass">Learn More</a>
                 </div>
                 
@@ -537,7 +537,7 @@
         <div class="container">
             <div class="stats-grid-glass">
                 <div class="stat-glass-card">
-                    <div class="stat-number-glass" data-target="1200">0</div>
+                    <div class="stat-number-glass" data-target="100+">0</div>
                     <div class="stat-label-glass">Resumes Analyzed</div>
                 </div>
                 <div class="stat-glass-card">

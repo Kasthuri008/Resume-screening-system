@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ResumeRanker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap" rel="stylesheet">
+    <!-- New font for Title -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .split-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .split-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .quick-action-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            margin-bottom: 16px;
+        }
+
+        .quick-action-card:hover {
+            background: var(--bg-card-hover);
+            border-color: var(--primary);
+        }
+
+        .project-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 50px;
+            padding-left: 10px;
+        }
+
+        .project-title i {
+            color: var(--primary);
+            filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.6));
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="project-title">
+                <i data-lucide="sparkles"></i>
+                <span>Resume<span style="color: var(--primary)">Ranker</span></span>
+            </div>
+            <nav class="nav-menu">
+                <a href="{{ url_for('dashboard') }}" class="nav-item active">
+                    <i data-lucide="layout-dashboard"></i>  Dashboard
+                </a>
+                <a href="{{ url_for('upload') }}" class="nav-item">
+                    <i data-lucide="upload-cloud"></i> Upload Resume
+                </a>
+                <a href="{{ url_for('scoring') }}" class="nav-item">
+                    <i data-lucide="bar-chart-2"></i> CV Scoring
+                </a>
+                <a href="{{ url_for('results') }}" class="nav-item">
+                    <i data-lucide="check-circle"></i> Results
+                </a>
+            </nav>
+            <div class="back-home">
+                <a href="{{ url_for('home') }}" class="nav-item">
+                    <i data-lucide="arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h2 class="page-title">Dashboard</h2>
+                <p class="page-subtitle">Welcome back, Recruiter</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i data-lucide="file-text"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-uploaded">0</div>
+                        <div class="stat-label">Total Resumes Analyzed</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(0, 230, 118, 0.15); color: var(--success);"><i
+                            data-lucide="user-check"></i></div>
+                    <div>
+                        <div class="stat-value" id="total-selected">0</div>
+                        <div class="stat-label">Top 3 Candidates Selected</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(255, 171, 0, 0.15); color: #FFAB00;"><i
+                            data-lucide="trophy"></i></div>
+                    <div>
+                        <div class="stat-value" id="highest-score">0%</div>
+                        <div class="stat-label">Highest CV Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Split Layout -->
+            <div class="split-layout">
+                <!-- Left: Quick Actions -->
+                <div>
+                    <h3 style="margin-bottom: 20px;">Quick Actions</h3>
+                    <div onclick="window.location.href='{{ url_for('upload') }}'" class="quick-action-card">
+                        <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="plus"></i></div>
+                        <div>
+                            <div style="font-weight: 600;">Upload New Batch</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Process new candidates</div>
+                        </div>
+                    </div>
+                    <div onclick="window.location.href='{{ url_for('scoring') }}'" class="quick-action-card">
+                        <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="bar-chart-2"></i></div>
+                        <div>
+                            <div style="font-weight: 600;">View CV Scoring</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Check detailed rankings
+                            </div>
+                        </div>
+                    </div>
+                    <div onclick="window.location.href='{{ url_for('results') }}'" class="quick-action-card">
+                        <div class="stat-icon" style="height: 40px; width: 40px;"><i data-lucide="trophy"></i></div>
+                        <div>
+                            <div style="font-weight: 600;">View Top 3 Results</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted);">Check selected candidates
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Recent Activity -->
+                <div>
+                    <h3 style="margin-bottom: 20px;">Recent Activity</h3>
+                    <div id="recent-activity-list"
+                        style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05);">
+                        {% if recent_activities %}
+                            {% for activity in recent_activities %}
+                            <div style="padding: 12px 0; {% if not loop.last %}border-bottom: 1px solid #333;{% endif %} display: flex; align-items: center;">
+                                <div style="width: 8px; height: 8px; background: 
+                                    {% if activity.type == 'success' %}var(--success)
+                                    {% elif activity.type == 'warning' %}var(--warning)
+                                    {% elif activity.type == 'error' %}var(--danger)
+                                    {% else %}var(--primary){% endif %}; 
+                                    border-radius: 50%; margin-right: 12px;"></div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 0.9rem;">{{ activity.message }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">{{ activity.time_ago }}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="color: var(--text-muted); font-style: italic;">No recent activity. Upload resumes to get started.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>
