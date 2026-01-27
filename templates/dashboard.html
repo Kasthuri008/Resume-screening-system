@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap" rel="stylesheet">
-    <!-- New font for Title -->
+    
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         .split-layout {
@@ -59,7 +59,7 @@
 
 <body>
     <div class="app-container">
-        <!-- Sidebar -->
+       
         <aside class="sidebar">
             <div class="project-title">
                 <i data-lucide="sparkles"></i>
@@ -86,14 +86,14 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
+        
         <main class="main-content">
             <div class="page-header">
                 <h2 class="page-title">Dashboard</h2>
                 <p class="page-subtitle">Welcome back, Recruiter</p>
             </div>
 
-            <!-- Stats -->
+            
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon"><i data-lucide="file-text"></i></div>
@@ -120,9 +120,9 @@
                 </div>
             </div>
 
-            <!-- Split Layout -->
+           
             <div class="split-layout">
-                <!-- Left: Quick Actions -->
+                
                 <div>
                     <h3 style="margin-bottom: 20px;">Quick Actions</h3>
                     <div onclick="window.location.href='{{ url_for('upload') }}'" class="quick-action-card">
@@ -150,7 +150,7 @@
                     </div>
                 </div>
 
-                <!-- Right: Recent Activity -->
+                
                 <div>
                     <h3 style="margin-bottom: 20px;">Recent Activity</h3>
                     <div id="recent-activity-list"

@@ -12,29 +12,29 @@ from werkzeug.utils import secure_filename
 import shutil
 from datetime import datetime
 
-# Initialize Flask app
+
 app = Flask(__name__)
 app.secret_key = 'resumeranker_secret_2024'
 
-# Configuration for file uploads
-app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max total upload size
+
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_FILES'] = 10
 
-# Configuration
+
 UPLOAD_FOLDER = app.config['UPLOAD_FOLDER']
-MIN_FILES = 10  # Minimum 10 resumes required
-MAX_FILES = 20  # Allow up to 20 resumes for better selection
+MIN_FILES = 10  
+MAX_FILES = 20  
 ALLOWED_EXTENSIONS = {'pdf'}
 
-# Ensure upload directory exists
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Global storage (in-memory database)
+
 resume_data = {}
 resume_scores = {}
 job_description = ""
-recent_activities = []  # New: Track recent activities
+recent_activities = []  
 system_stats = {
     'total_uploaded': 0,
     'total_selected': 0,
@@ -63,10 +63,10 @@ def clean_text(text):
     if not text:
         return ""
     
-    # Convert to lowercase
+   
     text = text.lower()
     
-    # Remove special characters, keep alphanumeric and spaces
+    
     text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)
     text = re.sub(r'\s+', ' ', text)
     
@@ -77,7 +77,7 @@ def extract_skills_from_job_desc(job_desc):
     if not job_desc:
         return []
     
-    # Common skills keywords (you can expand this list)
+    
     skill_keywords = [
         'python', 'java', 'javascript', 'react', 'angular', 'vue', 'nodejs', 'express',
         'html', 'css', 'bootstrap', 'jquery', 'php', 'laravel', 'django', 'flask',
@@ -112,10 +112,10 @@ def calculate_resume_score(resume_text, job_skills):
         if skill in cleaned_resume:
             matched_skills.append(skill)
     
-    # Calculate score percentage
+    
     score = (len(matched_skills) / len(job_skills)) * 100 if job_skills else 0
     
-    # Determine match level
+    
     if score >= 70:
         match_level = "High"
     elif score >= 40:
@@ -140,10 +140,10 @@ def add_activity(message, activity_type="info"):
         'type': activity_type
     }
     
-    # Add to beginning of list (most recent first)
+    
     recent_activities.insert(0, activity)
     
-    # Keep only last 10 activities
+    
     recent_activities = recent_activities[:10]
     
     print(f"📝 Activity logged: {message}")
@@ -152,12 +152,12 @@ def update_system_stats():
     """Update system statistics"""
     global system_stats
     
-    # Get all scores sorted by highest first
+  
     all_scores = list(resume_scores.values())
     all_scores.sort(key=lambda x: x['score'], reverse=True)
     
     system_stats['total_uploaded'] = len(resume_data)
-    # Always show top 3 candidates if we have enough resumes
+    
     system_stats['total_selected'] = min(3, len(all_scores)) if len(all_scores) >= MIN_FILES else 0
     system_stats['highest_score'] = max([
         score['score'] for score in resume_scores.values()
@@ -167,15 +167,15 @@ def clear_all_data():
     """Clear all data and reset system"""
     global resume_data, resume_scores, job_description, system_stats, recent_activities
     
-    # Delete uploaded files
+    
     if os.path.exists(UPLOAD_FOLDER):
         shutil.rmtree(UPLOAD_FOLDER)
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     
-    # Reset all data
+    
     resume_data.clear()
     resume_scores.clear()
-    recent_activities.clear()  # Clear activities too
+    recent_activities.clear()  
     job_description = ""
     system_stats = {
         'total_uploaded': 0,
@@ -185,7 +185,7 @@ def clear_all_data():
     
     add_activity("All data cleared and system reset", "warning")
 
-# Routes
+
 
 @app.route('/')
 def home():
@@ -197,7 +197,7 @@ def home():
 def upload():
     """Handle resume upload"""
     if request.method == 'POST':
-        # Get job description
+        
         global job_description
         job_description = request.form.get('job_description', '').strip()
         
@@ -205,7 +205,7 @@ def upload():
             flash('Please provide a job description for skill matching.', 'error')
             return redirect(request.url)
         
-        # Check files
+        
         if 'resumes' not in request.files:
             flash('No files selected.', 'error')
             return redirect(request.url)
@@ -219,7 +219,7 @@ def upload():
             flash('No files selected.', 'error')
             return redirect(request.url)
         
-        # Check minimum files requirement
+        
         if len(files) < MIN_FILES:
             flash(f'Minimum {MIN_FILES} resumes required. You selected only {len(files)} files.', 'error')
             return redirect(request.url)
@@ -228,13 +228,13 @@ def upload():
             flash(f'Maximum {MAX_FILES} files allowed. You selected {len(files)} files.', 'error')
             return redirect(request.url)
         
-        # Clear previous data
+        
         clear_all_data()
         job_description = request.form.get('job_description', '').strip()
         
         add_activity(f"Started new resume analysis session", "info")
         
-        # Extract skills from job description
+        
         job_skills = extract_skills_from_job_desc(job_description)
         
         if not job_skills:
@@ -247,13 +247,13 @@ def upload():
         processed_count = 0
         failed_files = []
         
-        # Process each file
+        
         for file in files:
             if file and allowed_file(file.filename):
                 try:
                     filename = secure_filename(file.filename)
                     
-                    # Handle duplicate filenames
+                    
                     counter = 1
                     original_filename = filename
                     while filename in resume_data:
@@ -261,26 +261,26 @@ def upload():
                         filename = f"{name}_{counter}{ext}"
                         counter += 1
                     
-                    # Save file
+                    
                     file_path = os.path.join(UPLOAD_FOLDER, filename)
                     file.save(file_path)
                     
-                    # Extract text
+                    
                     extracted_text = extract_text_from_pdf(file_path)
                     
                     if extracted_text:
-                        # Store resume data
+                        
                         resume_data[filename] = {
                             'text': extracted_text,
                             'file_path': file_path,
                             'upload_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                         }
                         
-                        # Calculate score
+                        
                         score_result = calculate_resume_score(extracted_text, job_skills)
                         resume_scores[filename] = score_result
                         
-                        # Log individual file processing
+                        
                         add_activity(f"Processed {filename} - Score: {score_result['score']}% ({score_result['match_level']} match)", "info")
                         
                         processed_count += 1
@@ -296,12 +296,12 @@ def upload():
             else:
                 failed_files.append(file.filename)
         
-        # Update statistics
+        
         update_system_stats()
         
-        # Log final results
+        
         if processed_count >= MIN_FILES:
-            # Sort candidates by score to get top 3
+            
             sorted_candidates = sorted(resume_scores.items(), key=lambda x: x[1]['score'], reverse=True)
             top_3 = sorted_candidates[:3]
             
@@ -339,7 +339,7 @@ def scoring():
     """CV Scoring page with detailed results"""
     add_activity("Viewed CV scoring results", "info")
     
-    # Prepare scoring data
+    
     scoring_results = []
     
     for filename, score_data in resume_scores.items():
@@ -350,7 +350,7 @@ def scoring():
             'match_level': score_data['match_level']
         })
     
-    # Sort by score (highest first)
+    
     scoring_results.sort(key=lambda x: x['score'], reverse=True)
     
     return render_template('cv_scoring.html', 
@@ -363,7 +363,7 @@ def results():
     """Results page with Top 3 candidates"""
     add_activity("Viewed top 3 selected candidates", "info")
     
-    # Prepare results data
+    
     results_data = []
     
     for filename, score_data in resume_scores.items():
@@ -374,9 +374,9 @@ def results():
             'matched_skills': score_data['matched_skills']
         })
     
-    # Sort by score (highest first) and take top 3
+    
     results_data.sort(key=lambda x: x['final_score'], reverse=True)
-    top_3_candidates = results_data[:3]  # Get only top 3
+    top_3_candidates = results_data[:3]  
     
     return render_template('result.html', 
                          results=top_3_candidates,
@@ -390,7 +390,7 @@ def clear():
     flash('All data cleared successfully!', 'success')
     return redirect(url_for('home'))
 
-# API Routes (for AJAX calls)
+
 @app.route('/api/stats')
 def api_stats():
     """Get current statistics"""
@@ -405,7 +405,7 @@ def api_recent_activities():
 @app.route('/api/scoring-data')
 def api_scoring_data():
     """Get scoring data as JSON"""
-    # Prepare scoring data
+    
     scoring_results = []
     
     for filename, score_data in resume_scores.items():
@@ -416,7 +416,7 @@ def api_scoring_data():
             'match_level': score_data['match_level']
         })
     
-    # Sort by score (highest first)
+    
     scoring_results.sort(key=lambda x: x['score'], reverse=True)
     
     return jsonify({'results': scoring_results})
@@ -424,7 +424,7 @@ def api_scoring_data():
 @app.route('/api/results-data')
 def api_results_data():
     """Get Top 3 results data as JSON"""
-    # Prepare results data
+    
     results_data = []
     
     for filename, score_data in resume_scores.items():
@@ -435,9 +435,9 @@ def api_results_data():
             'matched_skills': score_data['matched_skills']
         })
     
-    # Sort by score (highest first) and take top 3
+    
     results_data.sort(key=lambda x: x['final_score'], reverse=True)
-    top_3_candidates = results_data[:3]  # Get only top 3
+    top_3_candidates = results_data[:3]  
     
     return jsonify({
         'results': top_3_candidates,
@@ -445,7 +445,6 @@ def api_results_data():
         'top_3_selected': len(top_3_candidates)
     })
 
-# Error handlers
 @app.errorhandler(413)
 def too_large(e):
     flash('File too large! Please upload smaller files.', 'error')
@@ -461,7 +460,7 @@ if __name__ == '__main__':
     print(f"📊 Min files: {MIN_FILES}, Max files: {MAX_FILES}")
     print("🌐 Server starting at http://localhost:5000")
     
-    # Add initial activity
+    
     add_activity("ResumeRanker system started - Minimum 10 resumes required", "success")
     
     app.run(debug=True, host='0.0.0.0', port=5000)

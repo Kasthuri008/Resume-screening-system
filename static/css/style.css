@@ -1,30 +1,29 @@
 :root {
-    /* Theme Colors - Luxe Black + Pink */
+    
     --bg-dark: #121212;
     --bg-card: #1E1E1E;
     --bg-card-hover: #252525;
-    --primary: #FF4081; /* Hot Pink */
+    --primary: #FF4081; 
     --primary-hover: #F50057;
     --text-main: #FFFFFF;
     --text-muted: #B0B0B0;
     --border-color: #333333;
     
-    /* Status Colors */
-    --success: #00E676; /* Green for High match */
-    --warning: #FFEA00; /* Yellow for Medium match */
-    --danger: #FF1744; /* Red for Low match */
+    
+    --success: #00E676; 
+    --warning: #FFEA00; 
+    --danger: #FF1744; 
 
-    /* Spacing & Layout */
+    
     --sidebar-width: 260px;
     --header-height: 70px;
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
     
-    /* Typography */
+    
     --font-main: 'Inter', system-ui, -apple-system, sans-serif;
     
-    /* Transitions */
     --transition-fast: 0.2s ease;
     --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -53,7 +52,7 @@ ul {
     list-style: none;
 }
 
-/* Utilities */
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -101,7 +100,7 @@ ul {
     color: transparent;
 }
 
-/* Scrollbar */
+
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -119,13 +118,13 @@ ul {
     background: #555;
 }
 
-/* --- APP LAYOUT --- */
+
 .app-container {
     display: flex;
     min-height: 100vh;
 }
 
-/* Sidebar */
+
 .sidebar {
     width: var(--sidebar-width);
     background-color: #181818;
@@ -172,7 +171,7 @@ ul {
     padding-top: 20px;
 }
 
-/* Main Content */
+
 .main-content {
     flex: 1;
     margin-left: var(--sidebar-width);
@@ -180,7 +179,7 @@ ul {
     background-color: var(--bg-dark);
 }
 
-/* Page Headers */
+
 .page-header {
     margin-bottom: 30px;
 }
@@ -195,7 +194,7 @@ ul {
     color: var(--text-muted);
 }
 
-/* Stats Grid */
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -240,7 +239,7 @@ ul {
     font-size: 0.9rem;
 }
 
-/* Upload Area */
+
 .upload-area {
     background: var(--bg-card);
     border: 2px dashed #444;
@@ -270,7 +269,7 @@ ul {
     margin-bottom: 30px;
 }
 
-/* Table */
+
 .table-container {
     background: var(--bg-card);
     border-radius: var(--radius-md);
@@ -296,7 +295,7 @@ th {
     color: var(--text-muted);
 }
 
-/* Badges */
+
 .match-badge {
     padding: 4px 10px;
     border-radius: 20px;
